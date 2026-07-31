@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>수학 퀴즈</title>
+<style>
+body{font-family:Arial,sans-serif;background:#6c63ff;margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh}
+.box{background:#fff;padding:30px;border-radius:20px;max-width:500px;width:90%;text-align:center}
+#problem{font-size:42px;font-weight:bold;margin:20px 0}
+input{width:100%;padding:12px;font-size:22px;text-align:center}
+button{padding:12px 18px;margin:8px;border:none;border-radius:10px;cursor:pointer;font-size:16px}
+#result{margin-top:15px;font-weight:bold}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>🧮 수학 퀴즈</h1>
+<div id="problem"></div>
+<input id="answer" type="number" placeholder="정답 입력">
+<div>
+<button onclick="check()">정답 확인</button>
+<button onclick="nextQ()">다음 문제</button>
+</div>
+<div id="result"></div>
+<p>점수: <span id="score">0</span></p>
+</div>
+<script>
+let a,b,op,ans,score=0;
+function rnd(n){return Math.floor(Math.random()*n)+1;}
+function nextQ(){
+ const ops=["+","-","×"];
+ op=ops[Math.floor(Math.random()*ops.length)];
+ a=rnd(30); b=rnd(30);
+ if(op=="-"&&a<b){let t=a;a=b;b=t;}
+ if(op=="+")ans=a+b;
+ if(op=="-")ans=a-b;
+ if(op=="×")ans=a*b;
+ problem.textContent=`${a} ${op} ${b} = ?`;
+ answer.value="";
+ result.textContent="";
+ answer.focus();
+}
+function check(){
+ const v=Number(answer.value);
+ if(v===ans){
+   result.style.color="green";
+   result.textContent="🎉 정답!";
+   score+=10;
+ }else{
+   result.style.color="red";
+   result.textContent=`❌ 오답! 정답은 ${ans}`;
+ }
+ scoreEl.textContent=score;
+}
+const problem=document.getElementById("problem");
+const answer=document.getElementById("answer");
+const result=document.getElementById("result");
+const scoreEl=document.getElementById("score");
+answer.addEventListener("keydown",e=>{
+ if(e.key==="Enter"){
+   if(result.textContent==="") check();
+   else nextQ();
+ }
+});
+nextQ();
+</script>
+</body>
+</html>
